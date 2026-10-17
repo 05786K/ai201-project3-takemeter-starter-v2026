@@ -54,33 +54,56 @@
      The decision rule is worth a point on its own and it's the thing most
      people leave out. Every taxonomy has a hardest boundary. Name yours. -->
 
-### `label_one`
+### `question`
 
-**Definition:**
-
-**Example 1:**
->
-
-**Example 2:**
->
-
-### `label_two`
-
-**Definition:**
+**Definition:** The post's primary purpose is to ask readers for information, advice, or opinions.
 
 **Example 1:**
->
+> "Will the Bay Area ever have some kind of rail transit along the major Freeways?"
 
 **Example 2:**
->
+> "Is 85k a livable salary for North Oakland?"
 
-### The hardest boundary
+### `personal_experience`
 
-**Which two labels:**
+**Definition:** The post's primary purpose is to describe a specific situation or experience the author personally went through.
+
+**Example 1:**
+> "I have 'tech envy' as a non-tech worker."
+
+**Example 2:**
+> "My first-hand experience with Bay Area tech snobbery."
+
+### `analysis`
+
+**Definition:** The post's primary purpose is to explain or defend a conclusion using specific evidence or a clear chain of reasoning.
+
+**Example 1:**
+> "California's 'affordable housing' tax break is letting investors charge market-rate rents while avoiding property taxes."
+
+**Example 2:**
+> "PGE rates are getting higher regardless of consumption? How they are getting away with it?"
+
+### `opinion`
+
+**Definition:** The post's primary purpose is to express a judgment or position without providing specific supporting evidence or developing a clear argument.
+
+**Example 1:**
+> "Bay Area FB Marketplace is full of backyard breeders — stop buying from them!"
+
+**Example 2:**
+> "[Rant/Vent] Quit your bullshit with bringing your pets everywhere. Quit the fake 'emotional support animal' quasi-service online certifications."
+
+### The Hardest Boundary
+
+**Which two labels:** `question` and `personal_experience`
 
 **The decision rule I used every time:**
-<!-- e.g. "If the post names a specific checkable fact, it's `analysis`, even
-     if the tone is heated." -->
+Remove the explicit ask from the post. If a complete, stand-alone account of what happened to the author is left over, I label it `personal_experience` — the ask is just a hook inviting reaction. If removing the ask leaves nothing but a thin fact pattern that only exists to make the ask answerable, I label it `question`.
+
+> *"FasTrak hasn't billed me in 5+ months... should I be worried about a huge bill later?"* → `question`. Strip the ask and there's no story left, just a billing detail.
+>
+> *"Has anyone else felt a big difference between living in New York and the Bay Area?"* → `personal_experience`. Two full paragraphs of the author's own NY timeline stand on their own; the question is a hook, not the point.
 
 
 

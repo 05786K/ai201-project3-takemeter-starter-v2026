@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.reddit.com)",
+      "WebSearch",
+      "WebFetch(domain:redlib.catsarch.com)",
+      "WebFetch(domain:redlib.perennialte.ch)",
+      "WebFetch(domain:redlib.privacyredirect.com)",
+      "WebFetch(domain:redlib.nadeko.net)",
+      "WebFetch(domain:red.artemislena.eu)",
+      "WebFetch(domain:safereddit.com)",
+      "WebFetch(domain:redlib.cow.rip)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(gh api *)",
+      "WebFetch(domain:pypi.org)"
+    ]
+  }
+}
