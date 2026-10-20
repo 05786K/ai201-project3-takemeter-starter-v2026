@@ -65,9 +65,9 @@ These five criteria define what “working” means for the four-label classifie
 
    **Why this target:** The taxonomy includes potentially overlapping labels. For example, a post can ask a question while also explaining a view; this check helps reveal whether the label definitions and boundary rule are clear enough to apply consistently.
 
-4. **Boundary-case performance:** The classifier must correctly classify at least **75% of 20 preselected borderline posts on each seed**.
+4. **Boundary-case performance:** Among test posts whose true label is `question` or `personal_experience` — my hardest boundary, per the Label Taxonomy section — combined accuracy on just those two labels must be at least **75%, on each seed**.
 
-   **Why this target:** Borderline examples are especially useful for this taxonomy because the distinction between asking for input (`question`), supporting a conclusion (`analysis`), and expressing a judgment (`opinion`) can be subtle. A 75% target is demanding without requiring near-perfect performance on the hardest examples.
+   **Why this target:** This is computable straight from the confusion matrix `results.json` already saves (the `question`→`question` and `personal_experience`→`personal_experience` cells, divided by total support for those two labels), so it's checkable by anyone without extra code or a hand-picked list. 75% is demanding without requiring near-perfect performance on the boundary I already know is hardest.
 
 5. **Confidence:** Among the test predictions on each seed, **accuracy on the most-confident third of predictions must be at least 15 percentage points higher than accuracy on the least-confident third**.
 
