@@ -13,7 +13,9 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(gh api *)",
-      "WebFetch(domain:pypi.org)"
+      "WebFetch(domain:pypi.org)",
+      "Bash(python qa_check.py)",
+      "Bash(xxd)"
     ]
   }
 }

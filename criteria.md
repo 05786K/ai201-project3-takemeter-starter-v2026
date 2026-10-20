@@ -51,61 +51,27 @@ whether you hit them:
 
 ---
 
-## 1.
+These five criteria define what “working” means for the four-label classifier.
 
-<!-- Your criterion. It must name a number. -->
+1. **Overall accuracy:** The classifier must achieve at least **0.70 accuracy on each of the three seeds**.
 
+   **Why this target:** My labels aren't evenly split — `question`, `personal_experience`, and `opinion` each make up about 32% of the data, with `analysis` at only 3%. That means a baseline that always guesses one of the three big labels already clears roughly 32%, and one that can tell `analysis`-shaped posts apart and guesses randomly among the rest lands closer to 35%. 0.70 is roughly double that realistic baseline — a bar that actually means something, not a coin flip dressed up as a target. Requiring it on all three seeds, rather than just one favorable split, guards against a result that only looks good because of which posts happened to land in test.
 
+2. **Per-label performance:** The `question`, `personal_experience`, and `opinion` labels must each achieve an **F1 score of at least 0.70 on all three seeds**. For `analysis`, I'm tracking F1 but not holding it to the same per-seed bar: with only 6 total examples, each seed's test split contains roughly **one** `analysis` post, so a single seed's F1 is either 0.0 or 1.0 — essentially a coin flip, not a measurement. Instead, I require the `analysis` F1s **averaged across all three seeds to be at least 0.40** — still thin, but less purely luck-based than any single seed alone.
 
-**Why this target:**
+   **Why this target:** The first three labels have roughly 65 examples each (≈10 in test per seed), enough for F1 to mean something at 0.70. `analysis` doesn't have that luxury — the honest move is to say so and measure it differently, not apply the same bar and hope.
 
+3. **Labeling consistency:** On a separate review of **30 randomly selected posts**, I must agree with my original labels on at least **90%** of them.
 
+   **Why this target:** The taxonomy includes potentially overlapping labels. For example, a post can ask a question while also explaining a view; this check helps reveal whether the label definitions and boundary rule are clear enough to apply consistently.
 
----
+4. **Boundary-case performance:** The classifier must correctly classify at least **75% of 20 preselected borderline posts on each seed**.
 
-## 2.
+   **Why this target:** Borderline examples are especially useful for this taxonomy because the distinction between asking for input (`question`), supporting a conclusion (`analysis`), and expressing a judgment (`opinion`) can be subtle. A 75% target is demanding without requiring near-perfect performance on the hardest examples.
 
-<!-- Your criterion. -->
+5. **Confidence:** Among the test predictions on each seed, **accuracy on the most-confident third of predictions must be at least 15 percentage points higher than accuracy on the least-confident third**.
 
-
-
-**Why this target:**
-
-
-
----
-
-## 3.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
-
----
-
-## 4.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
-
----
-
-## 5.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
+   **Why this target:** This is exactly what the notebook's `confidence_report` already computes (`accuracy_most_confident_third` / `accuracy_least_confident_third`), so it's measurable with no extra code. A gap of zero would mean the model's confidence carries no signal at all; I didn't pick something larger because several of my labels sit on genuinely ambiguous boundaries (the `question`/`personal_experience` boundary especially), so I'd expect real, defensible uncertainty on some correct guesses too — a model that's never unsure about the hard cases would worry me more than reassure me.
 
 
 
