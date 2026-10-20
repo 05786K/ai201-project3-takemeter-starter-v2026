@@ -114,19 +114,19 @@ Remove the explicit ask from the post. If a complete, stand-alone account of wha
 <!-- Where you collected from, how you labelled, your counts, and three hard
      cases. -->
 
-**Where the posts came from:**
+**Where the posts came from:** r/bayarea, using Reddit's own `self:true` search (text posts only) across several sort orders (New, Hot, Top all-time, Comment count). Collected by hand — Reddit's current anti-scraping measures block automated collection, confirmed by testing.
 
-**How I labelled them:** <!-- Cold first? Pre-labelled with AI and corrected?
-Say so plainly — the disclosure is required, not penalised. -->
+**How I labelled them:** Mixed. About 30 posts were labelled cold. Most were pre-labelled from the title and then corrected (or confirmed) after reading the full post — several flipped on that second read. Disclosed per-row in the `note` column (`cold` vs `pre-label`).
 
 **Counts per label:**
 
 | Label | Count | Share |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-| **Total** |  | 100% |
+| personal_experience | 68 | 33.8% |
+| opinion | 65 | 32.3% |
+| question | 62 | 30.8% |
+| analysis | 6 | 3.0% |
+| **Total** | 201 | 100% |
 
 **Three hard cases**
 
@@ -134,25 +134,25 @@ Say so plainly — the disclosure is required, not penalised. -->
      been, and what you chose. These are worth more than the easy 190. -->
 
 **1.**
-> *The post:*
+> *The post:* "Lets be honest... how am I suppose to survive on 'Entry Level jobs' in the bay area?" — walks through real rent and take-home numbers toward an implicit conclusion that entry-level pay doesn't work here.
 >
-> *Could have been:*
+> *Could have been:* `question` or `analysis`.
 >
-> *I chose, because:*
+> *I chose `question`, because:* it reads as rhetorical venting, not an explicit ask — but the numbers are doing the same load-bearing work as my `analysis` example. Close call.
 
 **2.**
-> *The post:*
+> *The post:* "To the idiot who drives at 130+ mph on 280 south... F*** You!" — a direct-address rant at one specific car, encountered three times.
 >
-> *Could have been:*
+> *Could have been:* `personal_experience` or `opinion`.
 >
-> *I chose, because:*
+> *I chose `personal_experience`, because:* it stays narrow — one car, three sightings — instead of generalizing to a category of drivers, unlike my Tesla-drivers `opinion` example which makes the same rant shape into a sweeping claim.
 
 **3.**
-> *The post:*
+> *The post:* "San Jose has carried the Bay Area during the World Cup and emerged the biggest Winner" — cites a specific $600M economic estimate.
 >
-> *Could have been:*
+> *Could have been:* `opinion` or `analysis`.
 >
-> *I chose, because:*
+> *I chose `opinion`, because:* the number is decoration on a celebratory, boosterish post, not the engine of an argument — the fact isn't load-bearing.
 
 ---
 
