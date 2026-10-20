@@ -42,6 +42,7 @@
 <!-- Your community, and what your classifier sorts posts into. Three or four
      sentences. -->
 
+TakeMeter sorts self-text posts from r/bayarea, the San Francisco Bay Area subreddit, into four categories based on the post's primary purpose rather than its topic. `question` posts ask the community for information or advice; `personal_experience` posts recount something the author personally went through; `analysis` posts argue a conclusion from specific, checkable evidence; `opinion` posts state a judgment without backing it up. Two posts about the exact same topic — say, the cost of living — can land in any of the four, depending on whether the author is asking, narrating, arguing, or just venting.
 
 
 ---
@@ -160,15 +161,13 @@ Remove the explicit ask from the post. If a complete, stand-alone account of wha
 
 <!-- Your starting model, your settings, and anything you changed and why. -->
 
-**Base model:**
+**Base model:** `distilbert-base-uncased` (the notebook default).
 
-**Settings:** <!-- epochs, learning rate, batch size, seed -->
+**Settings:** 3 epochs, learning rate 2e-5, batch size 16, seed 42 — all defaults.
 
-**Anything I changed from the defaults, and why:**
+**Anything I changed from the defaults, and why:** Nothing yet. I ran Section 5 once with the defaults to get a real baseline reading before deciding whether anything was worth tuning, rather than changing settings before seeing how the defaults actually behaved.
 
-**Split sizes:** <!-- train / val / test, and per-label counts in the test
-split. If a label had fewer than about 8 in test, say so — it explains a lot
-of next unit's variance. -->
+**Split sizes:** train 139 / val 31 / test 31 (201 total). Test, per label: `question` 10, `personal_experience` 10, `opinion` 10, `analysis` 1. `analysis` has only 1 example in test — far below the ~8 floor — so its F1 (0.0 on this seed) is close to a coin flip and will swing hard across the three seeds; that's expected, not a bug.
 
 
 
@@ -185,17 +184,17 @@ of next unit's variance. -->
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* Had Claude triage a large batch of r/bayarea post titles into my four labels before I'd read any of the bodies, to speed up finding candidates.
+- *What came back:* Confident title-only guesses, several of which were wrong — e.g. "A Warning on E-Bikes" was guessed `opinion` from the title, but the full post turned out to be a first-hand account of an e-bike collision the author personally witnessed.
+- *What I changed:* Read the full text of every flagged post myself and corrected the label before it went into `labels.csv`. Several flipped this way, including a post that looked like `analysis` from its title (specific numbers) but turned out to just be a link to a news article with no argument of its own.
 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* Asked Claude to find real posts that would stress-test my original `question`/`analysis` decision rule.
+- *What came back:* It surfaced a different, more common boundary I was actually hitting — `question` vs. `personal_experience` — and proposed a "remove the ask" decision rule, checked against real examples from my data.
+- *What I changed:* Replaced my original hardest-boundary writeup with that rule, since the evidence showed it was the boundary I ran into far more often than the one I'd first picked.
 
-**Pre-labelling disclosure:**
+**Pre-labelling disclosure:** Most of my 201 posts were pre-labelled by AI from the title alone as a fast first pass, then I read the full post myself and corrected the label before it went into the dataset — marked `pre-label` vs. `cold` in the `note` column. This caught several wrong guesses before they ever reached the dataset, and a full re-read afterward still found three more mislabels that had slipped through.
 
 <!-- ═══════════════════════ UNIT 6 — THE TEST ═══════════════════════
 
