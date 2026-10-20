@@ -50,7 +50,7 @@ whether you hit them:
   Pick with that in mind — it is stricter than it first sounds.
 
 ---
-
+<!-- Added five criterias below -->
 These five criteria define what “working” means for the four-label classifier.
 
 1. **Overall accuracy:** The classifier must achieve at least **0.70 accuracy on each of the three seeds**.
