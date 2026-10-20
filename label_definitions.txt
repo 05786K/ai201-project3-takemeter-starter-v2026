@@ -5,6 +5,7 @@
 #
 # Delete the examples below and put yours in.
 
-analysis: makes an argument backed by a specific, checkable fact
-hot_take: a confident claim with no support offered
-reaction: an immediate response to something that just happened
+question: the post's primary purpose is to ask readers for information, advice, or opinions
+personal_experience: the post's primary purpose is to describe a specific situation or experience the author personally went through
+analysis: the post's primary purpose is to explain or defend a conclusion using specific evidence or a clear chain of reasoning
+opinion: the post's primary purpose is to express a judgment or position without providing specific supporting evidence or developing a clear argument
