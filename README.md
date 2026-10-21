@@ -202,27 +202,30 @@ Remove the explicit ask from the post. If a complete, stand-alone account of wha
      ═══════════════════════════════════════════════════════════════════ -->
 
 ---
+### Training Environment
+- Device: CPU
+- PyTorch version: 2.14.1+cpu
+
 
 ## Baseline vs. Trained
-
-<!-- Both models on the same posts. `python baseline.py --trained results.json`
-     prints this table for you. -->
-
+```
 | Measure | Baseline | Trained | Difference |
 |---|---|---|---|
-| Overall accuracy |  |  |  |
-| Macro F1 |  |  |  |
-| F1 — `label_one` |  |  |  |
-| F1 — `label_two` |  |  |  |
+| Overall accuracy | 0.387 | 0.581 | +0.194 |
+| Macro F1 | 0.289 | 0.429 | +0.140 |
+| F1 — `analysis` | 0.000 | 0.000 | +0.000 |
+| F1 — `opinion` | 0.444 | 0.560 | +0.116 |
+| F1 — `personal_experience` | 0.444 | 0.696 | +0.251 |
+| F1 — `question` | 0.267 | 0.462 | +0.195 |
 
+```
 **What I predicted before I looked:**
-<!-- Milestone 1 asks you to write this BEFORE seeing the trained numbers. A
-     prediction made afterwards isn't one. -->
+I predicted that my fine-tuned model will perform better than the baseline because it has learned from my labeled posts and is more familiar with my four categories.
 
 **What the gap actually means:**
 <!-- If the baseline matched your trained model, your fine-tuning added
      nothing — and that is a real finding, not a failure. Say it plainly. -->
-
+The fine-tuned model performed better than the baseline, with accuracy increasing from 38.7% to 58.1%. This suggests that training on my labeled posts helped the model classify the categories more accurately. However, both models scored 0.000 F1 for analysis, so fine-tuning did not improve that category. Overall, fine-tuning helped, but the model still struggles with some labels.
 
 
 ---
@@ -232,29 +235,35 @@ Remove the explicit ask from the post. If a complete, stand-alone account of wha
 <!-- Five criteria across three seeds. The notebook's section 6 prints the
      spread table; the Target and Verdict columns are yours. -->
 
+
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
-|---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+|---|---|---:|---:|---:|---|
+| 1. Overall accuracy | >= 0.70 on each seed | 0.581 | 0.419 | 0.419 | FAIL |
+| 2. Per-label F1 | Question, personal_experience, opinion >= 0.70 on all seeds; analysis average >= 0.40 across all three seeds | Q: 0.462; PE: 0.696; A: 0.000; O: 0.560 | Q: 0.182; PE: 0.485; A: 0.000; O: 0.471 | Q: 0.000; PE: 0.600; A: 0.000; O: 0.381 | FAIL |
+| 3. Labeling consistency | >= 90% agreement on 30 randomly selected posts | Not measured | Not measured | Not measured | NOT MEASURED |
+| 4. Boundary-case performance | >= 75% combined accuracy for true question and personal_experience posts on each seed | 11/20 = 55.0% | 9/20 = 45.0% | 9/20 = 45.0% | FAIL |
+| 5. Confidence | Most-confident-third accuracy >= least-confident-third accuracy + 0.15 on each seed | 0.80 vs 0.60; gap +0.20 | 0.50 vs 0.40; gap +0.10 | 0.60 vs 0.20; gap +0.40 | FAIL |
+
+**Abbreviations:** Q = question; PE = personal_experience; A = analysis; O = opinion.
+
 
 ### Confusion matrix
 
 <!-- ⚠️ TYPED AS A MARKDOWN TABLE. The notebook prints one ready to paste.
      An image of a matrix earns nothing. -->
 
-| true \ predicted |  |  |  |
-|---|---|---|---|
-| **** |  |  |  |
-| **** |  |  |  |
-| **** |  |  |  |
+| true \ predicted | question | personal_experience | analysis | opinion |
+|---|---|---|---|---|
+| **question** | 3 | 2 | 0 | 5 |
+| **personal_experience** | 0 | 8 | 0 | 2 |
+| **analysis** | 0 | 0 | 0 | 1 |
+| **opinion** | 0 | 3 | 0 | 7 |
 
 **My biggest off-diagonal number, and what it means:**
 <!-- Not "the model made mistakes" — WHICH boundary it didn't learn, and which
      direction. "7 real analysis posts were called hot_take and only 3 went the
      other way" is a direction, not just an error rate. -->
+My biggest off-diagonal number is 5: five real question posts were classified as opinion, while zero real opinion posts were classified as question. This suggests the model struggles to distinguish questions from opinions and tends to label questions as opinions.
 
 
 
