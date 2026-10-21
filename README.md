@@ -299,54 +299,23 @@ My biggest off-diagonal number is 5: five real question posts were classified as
 
 ## Agreement Report
 
-<!-- Your rate against the staff set, and every disagreement adjudicated.
-
-     Remember you labelled these 30 under the STAFF taxonomy in
-     data/staff_taxonomy.md, not your own — so every argument below is made
-     from those definitions and those decision rules. -->
-
-**Agreement rate:** ___ / 30 = ___%
-
-<!-- Nobody grades this number. A 60% who argues every disagreement from the
-     stated rules beats a 95% who wrote "staff was right" nine times. Several
-     of the 30 were chosen because they're genuinely ambiguous — you should be
-     winning some of these. -->
-
+**Agreement rate:** 28 / 30 = 93%
 **Disagreements**
-
-<!-- Three lines each: the post, both labels, and who you think is right and
-     why — grounded in the staff definitions you were both applying.
-
-     Then sort each into one of three piles:
-       (a) the rule covered it and I applied it loosely → a consistency problem
-       (b) the rule genuinely doesn't say               → a gap in the definitions
-       (c) the rule is ambiguous here and my reading is defensible → argue it.
-           This is a legitimate win.
-
-     Pile (a) is the one that matters most for your diagnosis: if you applied a
-     written rule two different ways on 30 posts, that is direct evidence about
-     what you did across your own 200. -->
-
 **1.**
-> *The post:*
->
-> *Staff said / I said:*
->
-> *My call, and why:*
->
-> *Which pile:*
+*The post:* "Times are down about 3% since the shoe rules changed, so obviously the shoes are the whole story and the sport has a problem."
+*Staff said / I said:* `hot_take` / `analysis`
+*My call, and why:*  The 3% statistic shows a correlation in timing, but the post does not establish that the shoe-rule change caused the improvement or that shoes explain the entire effect. The statistic does not carry the full argument; it is used to support an overconfident conclusion. Under Rule 1, this is a hot_take with a statistic rather than analysis.
+*Which pile:* Pile: (a) Consistency problem — I applied the load-bearing-fact rule too loosely.
 
 **2.**
-> *The post:*
->
-> *Staff said / I said:*
->
-> *My call, and why:*
->
-> *Which pile:*
+*The post:* "Wind was so bad on the out section I was leaning at about 20 degrees. Coming back felt like cheating."
+
+*Staff said / I said:* `reaction` / `analysis`
+*My call, and why:* The specific observation about leaning at approximately 20 degrees supports the claim that the wind strongly affected the outward section, while the return felt much easier. I interpreted this as analysis because the detail supports a comparison between the two sections. The taxonomy does not explicitly say how much argument is required, so my interpretation is defensible.
+*Which pile:* Pile: (c) Defensible ambiguity — the observation is specific and measurable, but the taxonomy's key distinction is whether that fact does argumentative work. 
 
 **What the pattern in my disagreements tells me:**
-
+I sometimes focus too much on specific details instead of whether they actually support an argument. I need to apply the taxonomy more carefully and judge each post by its main purpose.
 
 
 ---
