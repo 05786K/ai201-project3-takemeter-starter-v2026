@@ -194,6 +194,12 @@ Remove the explicit ask from the post. If a complete, stand-alone account of wha
 - *What came back:* It surfaced a different, more common boundary I was actually hitting — `question` vs. `personal_experience` — and proposed a "remove the ask" decision rule, checked against real examples from my data.
 - *What I changed:* Replaced my original hardest-boundary writeup with that rule, since the evidence showed it was the boundary I ran into far more often than the one I'd first picked.
 
+**Moment 3**
+
+- *What I asked for:* After relabeling two boundary posts and retraining, I shared the "after" results and asked whether the change had actually helped.
+- *What came back:* Claude noticed the "after" numbers were byte-identical to the original baseline — a sign the retrain had used a stale, pre-edit copy of the data rather than my actual changes, which turned out to be true (I'd edited `labels.csv` without reloading it in the notebook). After I reran it properly, it also flagged that one criterion's apparent improvement (the confidence gap, MISSED → MET) was computed over only 10 examples per third, making it too noisy to credit to the relabeling rather than to a different random split.
+- *What I changed:* Reran the notebook from the data-loading cell forward to get a genuine "after" result, and wrote up the confidence-gap flip as likely noise in "The Improvement" section instead of claiming it as evidence the change worked.
+
 **Pre-labelling disclosure:** Most of my 201 posts were pre-labelled by AI from the title alone as a fast first pass, then I read the full post myself and corrected the label before it went into the dataset — marked `pre-label` vs. `cold` in the `note` column. This caught several wrong guesses before they ever reached the dataset, and a full re-read afterward still found three more mislabels that had slipped through.
 
 <!-- ═══════════════════════ UNIT 6 — THE TEST ═══════════════════════
@@ -275,7 +281,7 @@ My biggest off-diagonal number is 5: five real question posts were classified as
 |---|---|---|---|---|
 | 1 | Overall accuracy | ≥0.70 per seed | MISSED | Accuracy was 0.581, 0.419, and 0.419 across seeds 42, 7, and 2024; none met the target. |
 | 2 | Per-label F1 | `question`, `personal_experience`, `opinion` ≥0.70 per seed; `analysis` average ≥0.40 | MISSED | No seed met the required F1 targets for the first three labels, and `analysis` averaged 0.00. |
-| 3 | Labeling consistency | ≥90% agreement on 30 reviewed posts | MET | The agreement report showed 28/30 agreement, or 93%. |
+| 3 | Labeling consistency | ≥90% agreement on 30 re-reviewed posts from my own dataset, under my own taxonomy | NOT MEASURED | Not run yet. The 28/30 (93%) figure is from the staff-taxonomy exercise on `staff_posts.csv` — a different dataset and taxonomy — so it doesn't satisfy this criterion. |
 | 4 | Boundary-case accuracy (`question`/`personal_experience`) | ≥75% per seed | MISSED | Combined accuracy was 0.55, 0.45, and 0.45 across the three seeds; none met the target. |
 | 5 | Confidence gap | ≥15 percentage points per seed | MISSED | The gaps were 20, 10, and 40 percentage points; seed 7 fell below the target. |
 
@@ -285,7 +291,7 @@ My biggest off-diagonal number is 5: five real question posts were classified as
 
 **Likely cause:** Difficult label boundaries and some labeling inconsistencies in the dataset.
 
-**Evidence:** Accuracy was 0.581, 0.419, and 0.419 across the three seeds, so none reached the 0.70 target. My Seed 42 confusion matrix shows five true `question` posts classified as `opinion`, suggesting that the model struggles to distinguish these categories. During my full dataset re-read, I found and corrected three posts that had been labeled `question` but should have been `personal_experience`. These corrections provide direct evidence that some labels in my own dataset were inconsistent. However, the available evidence does not establish how much those errors contributed to the overall accuracy misses.
+**Evidence:** Accuracy was 0.581, 0.419, and 0.419 across the three seeds, so none reached the 0.70 target. My Seed 42 confusion matrix shows five true `question` posts classified as `opinion`, suggesting that the model struggles to distinguish these categories. 
 
 ### Criterion 2 — Per-label F1 (MISSED)
 
@@ -301,9 +307,9 @@ My biggest off-diagonal number is 5: five real question posts were classified as
 
 ### Criterion 5 — Confidence (MISSED)
 
-**Likely cause:** Confidence ranking is not sufficiently reliable across all random splits; the underlying cause remains uncertain.
+**Likely cause:** A task the model can't reliably learn from this much data — the gap is computed over only 10 examples per third, so a one- or two-example shift swings it 10+ points, and ~140 training examples isn't enough to stabilize that.
 
-**Evidence:** The confidence gap was +0.20 for Seed 42 and +0.40 for Seed 2024, but only +0.10 for Seed 7, below the required +0.15. Since the criterion must hold on every seed, it was missed. The results suggest that confidence ranking is useful on some splits but not consistently enough to meet the target. To diagnose why Seed 7 performed worse, I would need to inspect that seed's confidence report and predictions to determine whether the issue relates to ambiguous examples, model calibration, or another factor.
+**Evidence:** The confidence gap was +0.20 for Seed 42 and +0.40 for Seed 2024, but only +0.10 for Seed 7, below the required +0.15. Since the criterion must hold on every seed, it was missed. With only 10 examples per confidence-third, each seed's gap is a small-sample statistic that can swing 10+ points from a single example landing differently — consistent with noise from too little data rather than a specific mislabeled boundary, since (unlike criteria 1, 2, and 4) nothing here points at a particular label pair.
 
 
 ---
@@ -334,24 +340,23 @@ I sometimes focus too much on specific details instead of whether they actually 
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** Relabeled two posts on the `question`/`personal_experience` boundary, from `question` to `personal_experience`: "How are people able to just move out of the bay area and get a job somewhere?... How are y'all doing it?" and "Not qualified for studio at $80k." Both have substantial personal narrative with the explicit ask reading as a hook rather than the point, per my "remove the ask" decision rule. No hyperparameters, model, or other data changed.
 
-**Which diagnosis pointed at it:**
+**Which diagnosis pointed at it:** Criterion 4's diagnosis — the boundary-case miss — identified this exact pair as a labeling-consistency problem rather than just a hard pattern for the model, based on three earlier mislabel corrections found during a full re-read of the dataset, all in the same direction (originally `question`, corrected to `personal_experience`).
 
 ### Run Log — After
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| 1. Overall accuracy | ≥0.70 | 0.548 | 0.452 | 0.419 | MISSED |
+| 2. Per-label F1 | big 3 ≥0.70 each seed; `analysis` avg ≥0.40 | `q` 0.33 / `pe` 0.64 / `o` 0.58 | `q` 0.00 / `pe` 0.61 / `o` 0.42 | `q` 0.00 / `pe` 0.56 / `o` 0.40 | MISSED |
+| 3. Labeling consistency | ≥90% on 30 re-reviewed own-taxonomy posts | not yet run | — | — | NOT YET MEASURED |
+| 4. Boundary-case (`question`/`personal_experience`) | ≥75% combined accuracy | 0.50 | 0.50 | 0.45 | MISSED |
+| 5. Confidence gap | ≥15pts | +20 | +50 | +50 | MET |
 
-**Did it help, and how do I know:**
+**Did it help, and how do I know:** No. Criterion 4 — the exact boundary this change targeted — is unchanged on average (0.48 before, 0.48 after) and still misses on all three seeds. `question`'s own F1 actually got worse (average 0.21 before → 0.11 after), and macro F1 declined overall (0.320 → 0.296). The one criterion that flipped, confidence gap (MISSED → MET), isn't convincing evidence of improvement: it's computed over only 10 examples per third, so a one- or two-example shift from a different random split swings it 10+ points on its own — two of the three seeds' gaps roughly doubled, which looks like split-to-split noise, not a calibration change caused by relabeling two posts.
 
-<!-- If it didn't, say so. Relabelling that didn't help is a genuinely
-     interesting result and earns full credit. -->
+The likely read: fixing two posts out of roughly 130 `question`/`personal_experience` candidates wasn't enough signal to move a model training on only ~140 examples. That doesn't mean the diagnosis was wrong — the three originally-documented mislabels, all in the same direction, are still real evidence of a genuine inconsistency — but it suggests either more inconsistency is left uncorrected than two posts' worth, or this boundary is hard enough for the model that a handful of label fixes can't overcome it at this dataset size.
 
 
 
@@ -361,11 +366,16 @@ I sometimes focus too much on specific details instead of whether they actually 
 
 <!-- For each criterion still missed: what you'd do, and why you stopped. -->
 
+**1. Overall accuracy.** What I'd do: a full re-review of all ~130 `question`/`personal_experience` posts against my "remove the ask" rule, not the two spot-fixes I tested this round. Why I stopped: this unit's deliverable is one diagnosed, tested improvement — a dataset-wide re-review is real, separate work better scoped as its own pass.
 
+**2. Per-label F1.** For `analysis`: collect substantially more `analysis`-labeled posts — this is a data-collection problem, not something a model or hyperparameter change fixes at 6 examples. For `question`/`opinion`: the same full boundary re-review as above. Why I stopped: `analysis` collection means a fresh, targeted search effort (the same kind of manual work that built the other 195 posts), and the boundary re-review has the same scope reason as criterion 1.
+
+**3. Labeling consistency.** What I'd do: actually run the self-review this criterion asks for — sample 30 posts from my own 201, re-label them blind, and write a small script like `agreement.py` to compute the rate. Why I stopped: this unit's time went toward testing the one diagnosed improvement instead of this separate check. This is the single most concrete piece of unfinished work here.
+
+**4. Boundary-case accuracy.** Same fix as criterion 1 — this and criterion 1 are the same underlying problem measured two different ways. Why I stopped: same scope reason.
 
 **The gap between what I meant my labels to capture and what the model
-learned:**
-<!-- Two sentences. Your confusion matrix is the evidence. -->
+learned:** My four labels were meant to separate asking for input, describing your own situation, arguing a conclusion, and stating a judgment — but the confusion matrix shows the model mostly learned three fuzzy buckets instead of four, with `question` collapsing into `personal_experience` and `opinion` in every seed and almost never the reverse, while `analysis` barely existed for it to learn at all. The model isn't inventing this confusion on its own — it's amplifying a real inconsistency I already found and only partially corrected in my own labels.
 
 
 
