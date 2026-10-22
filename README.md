@@ -271,28 +271,39 @@ My biggest off-diagonal number is 5: five real question posts were classified as
 
 ## Verdicts and Diagnoses
 
-<!-- MET or MISSED against LAST UNIT's target. The target has to hold across
-     all three seeds, not turn up sometimes. -->
-
 | # | Criterion | Target | Verdict | How I decided |
 |---|---|---|---|---|
-| 1 |  |  |  |  |
-| 2 |  |  |  |  |
-| 3 |  |  |  |  |
-| 4 |  |  |  |  |
-| 5 |  |  |  |  |
+| 1 | Overall accuracy | ≥0.70 per seed | MISSED | Accuracy was 0.581, 0.419, and 0.419 across seeds 42, 7, and 2024; none met the target. |
+| 2 | Per-label F1 | `question`, `personal_experience`, `opinion` ≥0.70 per seed; `analysis` average ≥0.40 | MISSED | No seed met the required F1 targets for the first three labels, and `analysis` averaged 0.00. |
+| 3 | Labeling consistency | ≥90% agreement on 30 reviewed posts | MET | The agreement report showed 28/30 agreement, or 93%. |
+| 4 | Boundary-case accuracy (`question`/`personal_experience`) | ≥75% per seed | MISSED | Combined accuracy was 0.55, 0.45, and 0.45 across the three seeds; none met the target. |
+| 5 | Confidence gap | ≥15 percentage points per seed | MISSED | The gaps were 20, 10, and 40 percentage points; seed 7 fell below the target. |
 
-**Diagnoses**
+## Diagnoses
 
-<!-- For each miss: the cause, and how you know. The four common causes are:
-     too few examples for a label, a boundary you applied inconsistently, a
-     genuinely hard label pair, and a task the model can't reach from this
-     much data.
+### Criterion 1 — Overall accuracy (MISSED)
 
-     ⚠️ Use your agreement report as evidence. It is the only instrument you
-     have that can tell a LABELLING problem from a MODEL problem, and this
-     section is graded on whether you used it that way. -->
+**Likely cause:** Difficult label boundaries and some labeling inconsistencies in the dataset.
 
+**Evidence:** Accuracy was 0.581, 0.419, and 0.419 across the three seeds, so none reached the 0.70 target. My Seed 42 confusion matrix shows five true `question` posts classified as `opinion`, suggesting that the model struggles to distinguish these categories. During my full dataset re-read, I found and corrected three posts that had been labeled `question` but should have been `personal_experience`. These corrections provide direct evidence that some labels in my own dataset were inconsistent. However, the available evidence does not establish how much those errors contributed to the overall accuracy misses.
+
+### Criterion 2 — Per-label F1 (MISSED)
+
+**Likely cause:** Too few examples for `analysis`, along with labeling inconsistencies and difficult boundaries among the other labels.
+
+**Evidence:** `analysis` had an F1 of 0.00 on all three seeds, and its six total examples provide very little training data. The other three labels also failed to meet their required F1 targets consistently. My full dataset re-read identified three posts incorrectly labeled `question` that I corrected to `personal_experience`, providing evidence of inconsistent labeling that could affect performance on those classes. In addition, my three hard cases include two structurally similar posts labeled differently: one as `opinion` and the other as `personal_experience`. This suggests that the boundary between those labels may be difficult to apply consistently. These findings support both data scarcity for `analysis` and possible label-boundary problems, although they do not prove that either issue explains every F1 miss.
+
+### Criterion 4 — Boundary-case performance (MISSED)
+
+**Likely cause:** Inconsistent labeling of the `question`/`personal_experience` boundary, combined with the model's difficulty distinguishing these classes from `opinion`.
+
+**Evidence:** Combined accuracy on true `question` and `personal_experience` posts was 55%, 45%, and 45%, below the 75% target. During my full dataset re-read, I found three posts labeled `question` that I corrected to `personal_experience`. All three corrections went in the same direction, providing direct evidence that I had applied this specific boundary inconsistently in the dataset. The Seed 42 confusion matrix also shows five true questions classified as `opinion`, two true personal experiences classified as `opinion`, and two true questions classified as `personal_experience`. Therefore, inconsistent labels are a plausible contributor, while the confusion matrix shows that the model also struggles with distinctions involving `opinion`. The evidence does not establish how much each issue contributed to the boundary-performance misses.
+
+### Criterion 5 — Confidence (MISSED)
+
+**Likely cause:** Confidence ranking is not sufficiently reliable across all random splits; the underlying cause remains uncertain.
+
+**Evidence:** The confidence gap was +0.20 for Seed 42 and +0.40 for Seed 2024, but only +0.10 for Seed 7, below the required +0.15. Since the criterion must hold on every seed, it was missed. The results suggest that confidence ranking is useful on some splits but not consistently enough to meet the target. To diagnose why Seed 7 performed worse, I would need to inspect that seed's confidence report and predictions to determine whether the issue relates to ambiguous examples, model calibration, or another factor.
 
 
 ---
@@ -300,6 +311,7 @@ My biggest off-diagonal number is 5: five real question posts were classified as
 ## Agreement Report
 
 **Agreement rate:** 28 / 30 = 93%
+
 **Disagreements**
 **1.**
 *The post:* "Times are down about 3% since the shoe rules changed, so obviously the shoes are the whole story and the sport has a problem."
